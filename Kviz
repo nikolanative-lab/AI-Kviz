@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Test: Da li vaš biznis gubi novac bez AI?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --brand-blue: #01befe;
+            --brand-yellow: #fbdb3c;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .brand-blue { color: #01befe; }
+        .bg-brand-blue { background-color: #01befe; }
+        .border-brand-blue { border-color: #01befe; }
+        .brand-yellow { color: #fbdb3c; }
+        .bg-brand-yellow { background-color: #fbdb3c; }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+        
+        .question-card {
+            background: linear-gradient(145deg, #2a2a3e 0%, #1e1e32 100%);
+            box-shadow: 0 20px 40px rgba(1, 190, 254, 0.3);
+            border: 1px solid rgba(1, 190, 254, 0.3);
+        }
+        
+        .answer-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+        }
+        
+        .answer-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(1, 190, 254, 0.2);
+            border-color: #01befe;
+            background: linear-gradient(145deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        
+        .progress-bar {
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, #fbdb3c 0%, #01befe 100%);
+        }
+        
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(1, 190, 254, 0.5));
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .ai-glow {
+            background: linear-gradient(45deg, #01befe, #fbdb3c, #01befe);
+            background-size: 200% 200%;
+            animation: aiGlow 3s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes aiGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .circuit-bg {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(1, 190, 254, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(251, 219, 60, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(1, 190, 254, 0.05) 0%, transparent 50%);
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(1, 190, 254, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(1, 190, 254, 0.6);
+            }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            margin: 3% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(1, 190, 254, 0.2);
+        }
+
+        .close {
+            color: #64748b;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: #01befe;
+        }
+        
+        .stats-card {
+            background: linear-gradient(145deg, rgba(1, 190, 254, 0.1) 0%, rgba(251, 219, 60, 0.1) 100%);
+            border: 1px solid rgba(1, 190, 254, 0.2);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Početni ekran -->
+        <div id="startScreen" class="max-w-4xl mx-auto text-center">
+            <div class="question-card rounded-3xl p-10 mb-8 circuit-bg">
+                <div class="floating-icon text-6xl mb-6">🤖</div>
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+                    Da li je vaš biznis <span class="ai-glow font-extrabold">spreman za AI revoluciju</span>?
+                </h1>
+                <p class="text-xl text-gray-200 mb-8 leading-relaxed">
+                    <strong>AI revolucija je počela!</strong> Dok jedni automatizuju i skaliraju, drugi ostaju u prošlosti. 
+                    <span class="brand-blue font-semibold">Testirajte spremnost vašeg biznisa za AI budućnost</span>
+                </p>
+                
+                <!-- Statistike -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="stats-card p-6 rounded-xl">
+                        <div class="text-3xl font-bold brand-blue">€3,500</div>
+                        <div class="text-sm text-gray-300">prosečna mesečna ušteda sa AI automatizacijom</div>
+                    </div>
+                    <div class="stats-card p-6 rounded-xl">
+                        <div class="text-3xl font-bold brand-yellow">25h</div>
+                        <div class="text-sm text-gray-300">nedeljno uštedite vremena uz AI asistenta</div>
+                    </div>
+                    <div class="stats-card p-6 rounded-xl">
+                        <div class="text-3xl font-bold brand-blue">300%</div>
+                        <div class="text-sm text-gray-300">više klijenata bez dodatnog rada</div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <p class="text-lg text-gray-200 mb-4">
+                        🚀 <strong>2 minuta</strong> da otkrijete da li ste spremni za AI budućnost
+                    </p>
+                    <p class="text-base text-gray-300">
+                        Dobićete <span class="brand-blue font-semibold">personalizovanu AI strategiju</span> za automatizaciju vašeg biznisa
+                    </p>
+                </div>
+                
+                <button onclick="startQuiz()" class="bg-brand-blue hover:bg-blue-600 text-white font-bold py-5 px-10 rounded-full text-xl transition-all duration-300 transform hover:scale-105 pulse-glow relative overflow-hidden">
+                    <span class="relative z-10">🚀 Želim da testiram svoj biznis</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 hover:opacity-20 transform -skew-x-12 -translate-x-full hover:translate-x-full transition-all duration-700"></div>
+                </button>
+                
+                <p class="text-sm text-gray-500 mt-4">
+                    ✅ Bez obaveza • ✅ Rezultat odmah • ✅ 100% besplatno
+                </p>
+            </div>
+        </div>
+
+        <!-- Kviz ekran -->
+        <div id="quizScreen" class="max-w-4xl mx-auto hidden">
+            <!-- Progress bar -->
+            <div class="bg-white rounded-full p-2 mb-8 shadow-lg">
+                <div id="progressBar" class="progress-bar h-6 rounded-full" style="width: 0%"></div>
+            </div>
+            
+            <!-- Pitanje broj -->
+            <div class="text-center mb-6">
+                <span id="questionNumber" class="text-white text-xl font-bold bg-black bg-opacity-30 px-6 py-3 rounded-full">Pitanje 1 od 12</span>
+            </div>
+
+            <!-- Pitanje -->
+            <div id="questionContainer" class="question-card rounded-3xl p-10 mb-6">
+                <div class="text-center mb-8">
+                    <h2 id="questionText" class="text-3xl font-bold text-white mb-6 leading-tight"></h2>
+                </div>
+                <div id="answersContainer" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <!-- Rezultat ekran -->
+        <div id="resultScreen" class="max-w-4xl mx-auto hidden">
+            <div class="question-card rounded-3xl p-10 text-center">
+                <div id="resultEmoji" class="text-7xl mb-6"></div>
+                <h2 id="resultTitle" class="text-4xl font-bold text-white mb-4"></h2>
+                <p id="resultDescription" class="text-xl text-gray-200 mb-6 leading-relaxed"></p>
+                <div id="scoreDisplay" class="text-2xl font-bold brand-blue mb-8"></div>
+                
+                <!-- Kratka analiza -->
+                <div id="shortAnalysis" class="bg-gradient-to-r from-blue-900 to-yellow-900 bg-opacity-30 p-8 rounded-2xl mb-8 text-left border border-brand-blue border-opacity-30">
+                    <h3 class="text-2xl font-bold brand-blue mb-4">📊 Vaša kratka analiza:</h3>
+                    <div id="analysisContent" class="space-y-3 text-gray-200"></div>
+                </div>
+                
+                <!-- Email forma za detaljnu analizu -->
+                <div class="bg-gradient-to-r from-yellow-900 to-blue-900 bg-opacity-30 p-8 rounded-2xl mb-8 border border-brand-yellow border-opacity-30">
+                    <h3 class="text-2xl font-bold brand-yellow mb-4">🎯 Želite detaljnu analizu i konkretna AI rešenja?</h3>
+                    <p class="text-lg text-gray-200 mb-6">
+                        Unesite email i dobićete <strong>personalizovanu strategiju</strong> sa konkretnim koracima 
+                        kako da implementirate AI u vaš biznis i <span class="brand-blue font-semibold">uštedite hiljade evra</span>.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                        <input type="email" id="detailedAnalysisEmail" placeholder="vaš@email.com" 
+                               class="flex-1 p-4 border-2 border-gray-200 rounded-lg text-center focus:border-brand-blue focus:outline-none">
+                        <button onclick="requestDetailedAnalysis()" 
+                                class="bg-brand-yellow hover:bg-yellow-400 text-gray-800 font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105">
+                            📧 Pošaljite mi analizu
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3">
+                        ✅ Besplatno • ✅ Bez spam-a • ✅ Konkretna rešenja za vaš biznis
+                    </p>
+                </div>
+                
+
+
+                <!-- Zahvalnica i poziv na deljenje -->
+                <div class="mb-8">
+                    <p class="text-lg text-gray-200 mb-4">
+                        🙏 <strong>Hvala vam</strong> što ste izdvojili vreme za testiranje!
+                    </p>
+                    <p class="text-base text-gray-300 mb-6">
+                        Ako vam je test bio koristan, <span class="brand-blue font-semibold">podelite ga</span> sa kolegama koji takođe mogu da uštede novac uz AI:
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <button onclick="shareResults()" class="bg-brand-blue hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 flex items-center gap-2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                        </svg>
+                        Podeli test
+                    </button>
+                    
+                    <button onclick="copyResults()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 flex items-center gap-2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                        Kopiraj link
+                    </button>
+                    
+                    <button onclick="restartQuiz()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
+                        🔄 Ponovi test
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Kako trenutno upravljate komunikacijom sa klijentima?",
+                answers: [
+                    { text: "Imam organizovan sistem za sve kanale", points: 2 },
+                    { text: "AI automatski sortira i odgovara na upite", points: 3 },
+                    { text: "Ručno odgovaram na sve poruke", points: 1 },
+                    { text: "Haos - gubim se u porukama", points: 0 }
+                ]
+            },
+            {
+                question: "Koliko vremena provodite na ponavljajućim administrativnim zadacima?",
+                answers: [
+                    { text: "Previše - to mi je pola dana", points: 0 },
+                    { text: "Oko 2-3 sata dnevno", points: 1 },
+                    { text: "Minimalno - automatizovao sam većinu", points: 3 },
+                    { text: "Nekoliko sati, ali je organizovano", points: 2 }
+                ]
+            },
+            {
+                question: "Kako pratite i analizirate performanse vašeg biznisa?",
+                answers: [
+                    { text: "Imam osnovne izveštaje koje pravim ručno", points: 1 },
+                    { text: "AI mi daje detaljnu analitiku u realnom vremenu", points: 3 },
+                    { text: "Ne pratim sistematski", points: 0 },
+                    { text: "Koristim alate za praćenje ključnih metrika", points: 2 }
+                ]
+            },
+            {
+                question: "Kako se nosite sa velikim brojem klijenata istovremeno?",
+                answers: [
+                    { text: "Imam sistem koji automatski upravlja svima", points: 3 },
+                    { text: "Organizovano radim sa listama i prioritetima", points: 2 },
+                    { text: "Nekako se snalazim, ali je stresno", points: 1 },
+                    { text: "Često se osećam preopterećeno", points: 0 }
+                ]
+            },
+            {
+                question: "Da li vaš biznis može da funkcioniše bez vaše konstantne prisutnosti?",
+                answers: [
+                    { text: "Delimično - neki procesi rade samostalno", points: 2 },
+                    { text: "Ne - bez mene se ništa ne dešava", points: 0 },
+                    { text: "Da, AI i automatizacija rade umesto mene", points: 3 },
+                    { text: "Kratko vreme mogu da budem odsutan", points: 1 }
+                ]
+            },
+            {
+                question: "Kako upravljate zakazivanjem i organizacijom termina?",
+                answers: [
+                    { text: "Ručno zakazujem sve termine", points: 1 },
+                    { text: "Klijenti sami zakazuju online 24/7", points: 3 },
+                    { text: "Nemam organizovan sistem", points: 0 },
+                    { text: "Koristim kalendar aplikacije", points: 2 }
+                ]
+            },
+            {
+                question: "Koliko efikasno pratite i negujete potencijalne klijente?",
+                answers: [
+                    { text: "AI automatski prati i neguje sve kontakte", points: 3 },
+                    { text: "Imam sistem za praćenje kontakata", points: 2 },
+                    { text: "Ponekad zaboravim da kontaktiram", points: 1 },
+                    { text: "Nemam organizovan pristup", points: 0 }
+                ]
+            },
+            {
+                question: "Kako se pripremajete za rast i skaliranje biznisa?",
+                answers: [
+                    { text: "Nemam plan za skaliranje", points: 0 },
+                    { text: "Planiram zapošljavanje više ljudi", points: 1 },
+                    { text: "Fokusiram se na automatizaciju procesa", points: 3 },
+                    { text: "Imam strategiju za postupni rast", points: 2 }
+                ]
+            },
+            {
+                question: "Koliko ste upoznati sa AI alatima za vaš tip biznisa?",
+                answers: [
+                    { text: "Koristim nekoliko AI alata redovno", points: 2 },
+                    { text: "Nisam upoznat sa mogućnostima", points: 0 },
+                    { text: "AI je integrisan u sve moje procese", points: 3 },
+                    { text: "Čuo sam o tome, ali nisam probao", points: 1 }
+                ]
+            },
+            {
+                question: "Kako reagujete na tehnološke promene u vašoj industriji?",
+                answers: [
+                    { text: "Aktivno pratim i implementiram novitete", points: 3 },
+                    { text: "Čekam da se tehnologija stabilizuje", points: 1 },
+                    { text: "Prilagođavam se kada moram", points: 2 },
+                    { text: "Izbegavam promene koliko god mogu", points: 0 }
+                ]
+            },
+            {
+                question: "Koliko vremena provodite na marketingu i privlačenju klijenata?",
+                answers: [
+                    { text: "Previše - to mi oduzima vreme od rada", points: 0 },
+                    { text: "AI automatski upravlja marketing kampanjama", points: 3 },
+                    { text: "Imam organizovan marketing plan", points: 2 },
+                    { text: "Radim marketing kad stignem", points: 1 }
+                ]
+            },
+            {
+                question: "Kako vidite budućnost vašeg biznisa u narednih 5 godina?",
+                answers: [
+                    { text: "Planiram da ostanem na istom nivou", points: 0 },
+                    { text: "Želim značajan rast uz AI automatizaciju", points: 3 },
+                    { text: "Nadam se postupnom rastu", points: 1 },
+                    { text: "Imam jasnu strategiju za ekspanziju", points: 2 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Pitanje ${currentQuestion + 1} od ${questions.length}`;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-button w-full p-4 text-left text-gray-800 bg-gray-50 hover:bg-blue-100 rounded-xl border-2 border-transparent hover:border-blue-300 transition-all duration-200 font-medium';
+                button.textContent = answer.text;
+                button.onclick = () => selectAnswer(index);
+                answersContainer.appendChild(button);
+            });
+            
+            updateProgressBar();
+        }
+
+        function selectAnswer(answerIndex) {
+            const question = questions[currentQuestion];
+            const selectedAnswer = question.answers[answerIndex];
+            
+            score += selectedAnswer.points;
+            userAnswers.push({
+                question: question.question,
+                answer: selectedAnswer.text,
+                points: selectedAnswer.points
+            });
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                setTimeout(() => {
+                    showQuestion();
+                }, 300);
+            } else {
+                setTimeout(() => {
+                    showResults();
+                }, 300);
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showResults() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+            
+            let resultTitle, resultDescription, resultEmoji;
+            
+            if (score >= 30) {
+                resultTitle = "AI Lider";
+                resultDescription = "Vaš biznis je već na visokom nivou! Možete dodatno optimizovati procese i povećati profit kroz napredne AI strategije.";
+                resultEmoji = "🏆";
+            } else if (score >= 15) {
+                resultTitle = "AI Potencijal";
+                resultDescription = "Vaš biznis ima solidnu osnovu, ali gubite značajan novac na neautomatizovanim procesima. AI može da vam uštedi hiljade evra mesečno.";
+                resultEmoji = "📈";
+            } else {
+                resultTitle = "AI Starter";
+                resultDescription = "Vaš biznis gubi ogroman novac svakodnevno! AI automatizacija može da vam uštedi 60-80% vremena i značajno poveća profit.";
+                resultEmoji = "🚀";
+            }
+            
+            document.getElementById('resultTitle').textContent = resultTitle;
+            document.getElementById('resultDescription').textContent = resultDescription;
+            document.getElementById('resultEmoji').textContent = resultEmoji;
+            document.getElementById('scoreDisplay').textContent = `Vaš rezultat: ${score} od ${questions.length * 3} poena`;
+            
+            generateShortAnalysis();
+        }
+
+        function generateShortAnalysis() {
+            let analysisPoints = [];
+            
+            // Analiziraj odgovore i dodeli probleme
+            userAnswers.forEach((answer, index) => {
+                if (answer.points <= 1) {
+                    switch(index) {
+                        case 0:
+                            analysisPoints.push("⏰ Gubite preko 10 sati nedeljno na ponavljajuća pitanja - AI napredni asistent može da reši 80% upita automatski");
+                            break;
+                        case 1:
+                            analysisPoints.push("🌙 Propuštate prodaje van radnog vremena - AI napredni asistent radi 24/7 i nikad ne spava");
+                            break;
+                        case 2:
+                            analysisPoints.push("📊 Neorganizovano upravljanje klijentima - AI napredni asistent automatski prati i neguje svaki kontakt");
+                            break;
+                        case 3:
+                            analysisPoints.push("📋 Previše vremena na administraciju - AI napredni asistent može automatizovati 70% administrativnih zadataka");
+                            break;
+                        case 7:
+                            analysisPoints.push("💬 Nemate AI naprednog asistenta - gubite 40% potencijalnih klijenata koji odlaze bez odgovora");
+                            break;
+                        case 10:
+                            analysisPoints.push("📧 Ručni marketing - AI napredni asistent može povećati konverzije za 300%");
+                            break;
+                    }
+                }
+            });
+            
+            // Ako nema problema, dodaj pozitivne komentare
+            if (analysisPoints.length === 0) {
+                analysisPoints.push("✅ Vaš biznis je dobro organizovan, ali AI može dodatno optimizovati procese");
+                analysisPoints.push("🚀 Fokusirajte se na napredne AI strategije za skaliranje biznisa");
+                analysisPoints.push("💡 Implementirajte prediktivnu analitiku za bolje poslovne odluke");
+            }
+            
+            // Prikaži maksimalno 4 najvažnije tačke
+            const topPoints = analysisPoints.slice(0, 4);
+            document.getElementById('analysisContent').innerHTML = topPoints.map(point => 
+                `<div class="flex items-start space-x-3">
+                    <div class="text-lg">${point.split(' ')[0]}</div>
+                    <div>${point.substring(point.indexOf(' ') + 1)}</div>
+                </div>`
+            ).join('');
+        }
+
+        function requestDetailedAnalysis() {
+            const email = document.getElementById('detailedAnalysisEmail').value;
+            if (!email || !email.includes('@')) {
+                showCustomAlert('Molimo unesite validnu email adresu!');
+                return;
+            }
+            
+            // BACKUP SISTEM - sačuvaj podatke lokalno
+            saveDataLocally(email);
+            
+            // Pošalji podatke na nikolanative@gmail.com
+            sendDetailedAnalysisEmail(email);
+            
+            // Prikaži poruku korisniku
+            showCustomAlert('Hvala! Detaljnu analizu ćete dobiti u roku od 24h na vašu email adresu.');
+            
+            // Sakrij formu i prikaži veliku potvrdu
+            const emailSection = document.querySelector('button[onclick="requestDetailedAnalysis()"]').parentElement;
+            emailSection.innerHTML = `
+                <div class="bg-green-100 border-2 border-green-500 rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">✅</div>
+                    <h3 class="text-2xl font-bold text-green-800 mb-4">Zahtev je uspešno poslat!</h3>
+                    <p class="text-lg text-green-700 mb-2">
+                        <strong>Detaljnu AI analizu ćete dobiti u roku od 24h</strong> na vašu email adresu.
+                    </p>
+                    <p class="text-base text-green-600">
+                        📧 Proverite i spam folder • 🚀 Analiza sadrži konkretne korake za automatizaciju
+                    </p>
+                </div>
+            `;
+        }
+
+        function sendDetailedAnalysisEmail(userEmail) {
+            const resultTitle = document.getElementById('resultTitle').textContent;
+            
+            // Build comprehensive message for Nikola
+            let emailMessage = `🚨 NOVI LEAD ZA AI AUTOMATIZACIJU!
+
+📧 Email: ${userEmail}
+📅 Datum: ${new Date().toLocaleDateString('sr-RS')} u ${new Date().toLocaleTimeString('sr-RS')}
+
+🏆 AI SPREMNOST: ${resultTitle} (${score}/${questions.length * 3} poena)
+
+📋 DETALJNI ODGOVORI SA ANALIZOM:
+
+`;
+
+            // Add each question and answer with analysis
+            userAnswers.forEach((answer, index) => {
+                let priority = "";
+                let analysis = "";
+                let recommendation = "";
+                
+                if (answer.points === 0) {
+                    priority = "🔴 KRITIČNO";
+                    analysis = "Najveći problem - hitno potrebna AI automatizacija";
+                    recommendation = "PRIORITET #1 za implementaciju";
+                } else if (answer.points === 1) {
+                    priority = "🟡 PROBLEM";
+                    analysis = "Značajan prostor za poboljšanje uz AI";
+                    recommendation = "Srednji prioritet za optimizaciju";
+                } else if (answer.points === 2) {
+                    priority = "🟢 DOBRO";
+                    analysis = "Solidno, ali AI može dodatno poboljšati";
+                    recommendation = "Fokus na napredne AI funkcionalnosti";
+                } else {
+                    priority = "✅ ODLIČNO";
+                    analysis = "AI lider - već koristi automatizaciju";
+                    recommendation = "Fokus na skaliranje i napredne strategije";
+                }
+                
+                emailMessage += `${index + 1}. ${questions[index].question}
+
+ODGOVOR: "${answer.text}"
+POENI: ${answer.points}/3 ${priority}
+ANALIZA: ${analysis}
+PREPORUKA: ${recommendation}
+
+---
+
+`;
+            });
+
+            // Add key improvement areas
+            const problemAreas = userAnswers.filter(answer => answer.points <= 1);
+            if (problemAreas.length > 0) {
+                emailMessage += `🎯 KLJUČNE OBLASTI ZA POBOLJŠANJE:
+
+`;
+                problemAreas.forEach((answer) => {
+                    const questionIndex = userAnswers.indexOf(answer);
+                    let area = "";
+                    let solution = "";
+                    
+                    switch(questionIndex) {
+                        case 0: area = "Komunikacija sa klijentima"; solution = "AI chatbot + automatsko sortiranje"; break;
+                        case 1: area = "Administrativni zadaci"; solution = "Workflow automatizacija"; break;
+                        case 2: area = "Analitika biznisa"; solution = "AI dashboard + real-time izveštaji"; break;
+                        case 3: area = "Upravljanje klijentima"; solution = "CRM automatizacija + AI prioritizacija"; break;
+                        case 4: area = "Nezavisnost biznisa"; solution = "Kompletna AI automatizacija procesa"; break;
+                        case 5: area = "Zakazivanje termina"; solution = "Online booking sistem"; break;
+                        case 6: area = "Lead nurturing"; solution = "AI follow-up sekvence"; break;
+                        case 7: area = "Skaliranje biznisa"; solution = "AI-driven growth strategija"; break;
+                        case 8: area = "AI znanje"; solution = "Edukacija + implementacija AI alata"; break;
+                        case 9: area = "Adaptacija na promene"; solution = "AI trend analiza + automatska prilagođavanja"; break;
+                        case 10: area = "Marketing automatizacija"; solution = "AI marketing kampanje"; break;
+                        case 11: area = "Vizija budućnosti"; solution = "Strategijsko planiranje sa AI"; break;
+                    }
+                    
+                    emailMessage += `• ${area}: ${solution}
+`;
+                });
+            }
+
+            // Add savings estimation
+            emailMessage += `
+💰 PROCENJENA UŠTEDA I RAST:
+• Vreme: ${score < 15 ? '25-40h' : score < 30 ? '15-25h' : '10-15h'} nedeljno
+• Troškovi: ${score < 15 ? '2000-5000€' : score < 30 ? '1000-3000€' : '500-2000€'} mesečno
+• Povećanje prihoda: ${score < 15 ? '50-200%' : score < 30 ? '30-100%' : '20-50%'}
+• ROI: ${score < 15 ? '300-500%' : score < 30 ? '200-400%' : '150-300%'} u prvoj godini
+
+📞 SALES PRISTUP:
+• Tip: ${score < 15 ? 'Problem-focused (fokus na bolove)' : score < 30 ? 'Growth-focused (fokus na mogućnosti)' : 'Innovation-focused (fokus na prednosti)'}
+• Urgentnost: ${score < 15 ? 'VISOKA - gubi novac svaki dan' : score < 30 ? 'SREDNJA - propušta prilike' : 'NISKA - optimizacija postojećeg'}
+• Pristup: ${score < 15 ? 'Naglasi troškove neautomatizacije' : score < 30 ? 'Pokaži potencijal za rast' : 'Fokus na konkurentsku prednost'}
+
+⚡ VEROVATNOĆA KONVERZIJE: ${score < 15 ? 'VISOKA (70%+)' : score < 30 ? 'SREDNJA (40-70%)' : 'NISKA (20-40%)'}
+
+---
+Test završen: ${new Date().toLocaleString('sr-RS')}
+Link: ${window.location.href}`;
+
+            const subject = "🚨 NOVI LEAD - AI Test: " + userEmail + " (" + resultTitle + ")";
+            
+            // EMAILJS SETUP - VAŠI PODACI
+            emailjs.init("uJ0IRzzaLev9f5VTk"); // Vaš Public Key
+            
+            emailjs.send("service_g3gae9f", "template_mh6tevj", {
+                to_name: "Nikola",
+                from_email: userEmail,
+                timestamp: new Date().toLocaleString('sr-RS'),
+                total_score: score,
+                category: resultTitle,
+                quiz_data: emailMessage,
+                subject: subject,
+                message: emailMessage,
+                reply_to: userEmail
+            }).then((response) => {
+                console.log('✅ EmailJS: Email uspešno poslat!', response.status, response.text);
+                showCustomAlert('✅ Email je uspešno poslat! Proverite inbox.');
+            }).catch((error) => {
+                console.log('❌ EmailJS greška:', error);
+                console.log('Pokušavam Formspree backup...');
+                tryFormspree();
+            });
+            
+            function tryFormspree() {
+                // BACKUP: Formspree
+                fetch('https://formspree.io/f/xpwzgqpv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        subject: subject,
+                        message: emailMessage,
+                        _replyto: userEmail,
+                        _subject: subject
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('✅ Formspree: Email uspešno poslat!');
+                        showCustomAlert('✅ Email je poslat preko backup sistema!');
+                    } else {
+                        console.log('❌ Formspree failed, pokušavam mailto...');
+                        useMailtoBackup();
+                    }
+                }).catch(() => {
+                    console.log('❌ Formspree failed, pokušavam mailto...');
+                    useMailtoBackup();
+                });
+            }
+            
+            function useMailtoBackup() {
+                // POSLEDNJI BACKUP: Mailto (uvek radi)
+                const mailtoLink = `mailto:nikolanative@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailMessage)}`;
+                window.open(mailtoLink);
+                console.log('📧 Mailto backup aktiviran');
+                showCustomAlert('📧 Otvoren je vaš email klijent sa podacima!');
+            }
+            
+            console.log('Email sistem pokrenut za:', userEmail);
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+            document.getElementById('detailedAnalysisEmail').value = '';
+            document.getElementById('detailedAnalysisEmail').style.display = 'block';
+            document.querySelector('button[onclick="requestDetailedAnalysis()"]').style.display = 'block';
+        }
+
+        function shareResults() {
+            const resultTitle = document.getElementById('resultTitle').textContent;
+            const currentUrl = window.location.href;
+            const shareText = `🤖 Upravo sam testirao koliko moj biznis gubi novac bez AI! 
+
+Moj rezultat: ${resultTitle}
+
+Rezultat me je šokirao... Testiraj i ti svoj biznis BESPLATNO! 💰`;
+            
+            // Try native sharing first
+            if (navigator.share && navigator.canShare) {
+                navigator.share({
+                    title: 'AI Test: Da li vaš biznis gubi novac bez AI?',
+                    text: shareText,
+                    url: currentUrl
+                }).catch(() => {
+                    // Fallback to clipboard
+                    fallbackCopyShare(shareText, currentUrl);
+                });
+            } else {
+                // Direct fallback to clipboard
+                fallbackCopyShare(shareText, currentUrl);
+            }
+        }
+
+        function fallbackCopyShare(shareText, currentUrl) {
+            const fullText = `${shareText}\n\n${currentUrl}`;
+            
+            // Try modern clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(fullText).then(() => {
+                    showCustomAlert('Tekst je kopiran u clipboard! Možete ga podeliti gde god želite.');
+                }).catch(() => {
+                    // Fallback to older method
+                    legacyCopyToClipboard(fullText);
+                });
+            } else {
+                // Fallback to older method
+                legacyCopyToClipboard(fullText);
+            }
+        }
+
+        function legacyCopyToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCustomAlert('Tekst je kopiran u clipboard! Možete ga podeliti gde god želite.');
+            } catch (err) {
+                showCustomAlert('Molimo vas da ručno kopirate link: ' + window.location.href);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function copyResults() {
+            const currentUrl = window.location.href;
+            const copyText = `🤖 AI Test: Da li vaš biznis gubi novac bez AI?
+
+Otkrijte gde gubite vreme i novac i kako AI može da vam uštedi hiljade evra mesečno!
+
+Testiraj BESPLATNO: ${currentUrl}`;
+            
+            // Try modern clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(copyText).then(() => {
+                    showCustomAlert('Link je kopiran u clipboard!');
+                }).catch(() => {
+                    legacyCopyToClipboard(copyText);
+                });
+            } else {
+                legacyCopyToClipboard(copyText);
+            }
+        }
+
+
+
+        function generateDetailedAnalysis() {
+            let detailedAnalysis = {
+                komunikacija: { score: 0, problems: [], solutions: [] },
+                automatizacija: { score: 0, problems: [], solutions: [] },
+                analitika: { score: 0, problems: [], solutions: [] },
+                upravljanje: { score: 0, problems: [], solutions: [] },
+                skaliranje: { score: 0, problems: [], solutions: [] }
+            };
+            
+            userAnswers.forEach((answer, index) => {
+                switch(index) {
+                    case 0: // Komunikacija sa klijentima
+                        detailedAnalysis.komunikacija.score = answer.points;
+                        if (answer.points <= 1) {
+                            detailedAnalysis.komunikacija.problems.push("Neorganizovana komunikacija sa klijentima");
+                            detailedAnalysis.komunikacija.solutions.push("24/7 AI chatbot koji odgovara na 80% pitanja automatski");
+                            detailedAnalysis.komunikacija.solutions.push("Automatsko sortiranje i prioritizacija poruka");
+                            detailedAnalysis.komunikacija.solutions.push("Integracija svih komunikacionih kanala u jedan sistem");
+                        }
+                        break;
+                    case 1: // Administrativni zadaci
+                        detailedAnalysis.automatizacija.score += answer.points;
+                        if (answer.points <= 1) {
+                            detailedAnalysis.automatizacija.problems.push("Previše vremena na ponavljajućim zadacima");
+                            detailedAnalysis.automatizacija.solutions.push("Workflow automatizacija za rutinske procese");
+                            detailedAnalysis.automatizacija.solutions.push("AI asistent za kreiranje dokumenata i izveštaja");
+                            detailedAnalysis.automatizacija.solutions.push("Automatsko fakturisanje i praćenje plaćanja");
+                        }
+                        break;
+                    case 2: // Analitika
+                        detailedAnalysis.analitika.score = answer.points;
+                        if (answer.points <= 1) {
+                            detailedAnalysis.analitika.problems.push("Nedostatak sistematskog praćenja performansi");
+                            detailedAnalysis.analitika.solutions.push("AI dashboard sa real-time metrikama");
+                            detailedAnalysis.analitika.solutions.push("Prediktivna analitika za bolje odlučivanje");
+                            detailedAnalysis.analitika.solutions.push("Automatski izveštaji i alerti");
+                        }
+                        break;
+                    case 3: // Upravljanje klijentima
+                    case 6: // Lead nurturing
+                        detailedAnalysis.upravljanje.score += answer.points;
+                        if (answer.points <= 1) {
+                            detailedAnalysis.upravljanje.problems.push("Neorganizovano upravljanje klijentima i lead-ovima");
+                            detailedAnalysis.upravljanje.solutions.push("CRM sistem sa AI lead scoring");
+                            detailedAnalysis.upravljanje.solutions.push("Automatske follow-up sekvence");
+                            detailedAnalysis.upravljanje.solutions.push("Personalizovane komunikacije na osnovu AI analize");
+                        }
+                        break;
+                    case 7: // Skaliranje
+                    case 11: // Budućnost biznisa
+                        detailedAnalysis.skaliranje.score += answer.points;
+                        if (answer.points <= 1) {
+                            detailedAnalysis.skaliranje.problems.push("Nedostatak strategije za rast i skaliranje");
+                            detailedAnalysis.skaliranje.solutions.push("AI-driven growth strategija");
+                            detailedAnalysis.skaliranje.solutions.push("Automatizacija procesa za nezavisan rad biznisa");
+                            detailedAnalysis.skaliranje.solutions.push("Sistemsko pristup ekspanziji uz AI podršku");
+                        }
+                        break;
+                }
+            });
+            
+            return detailedAnalysis;
+        }
+
+
+
+        function saveDataLocally(email) {
+            const resultTitle = document.getElementById('resultTitle').textContent;
+            const timestamp = new Date().toLocaleString('sr-RS');
+            
+            const leadData = {
+                email: email,
+                timestamp: timestamp,
+                resultTitle: resultTitle,
+                score: score,
+                maxScore: questions.length * 3,
+                answers: userAnswers,
+                url: window.location.href
+            };
+            
+            // Sačuvaj u localStorage
+            let allLeads = JSON.parse(localStorage.getItem('aiTestLeads') || '[]');
+            allLeads.push(leadData);
+            localStorage.setItem('aiTestLeads', JSON.stringify(allLeads));
+            
+            console.log('NOVI LEAD SAČUVAN:', leadData);
+        }
+
+        function showAdminPanel() {
+            const allLeads = JSON.parse(localStorage.getItem('aiTestLeads') || '[]');
+            
+            let adminHTML = `
+                <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-lg max-w-4xl w-full max-h-90vh overflow-y-auto p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold">Admin Panel - Svi Lead-ovi</h2>
+                            <button onclick="closeAdminPanel()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <button onclick="exportLeads()" class="bg-green-500 text-white px-4 py-2 rounded mr-2">
+                                📧 Izvezi sve lead-ove
+                            </button>
+                            <button onclick="clearLeads()" class="bg-red-500 text-white px-4 py-2 rounded">
+                                🗑️ Obriši sve
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-4">
+            `;
+            
+            if (allLeads.length === 0) {
+                adminHTML += '<p class="text-gray-500">Nema sačuvanih lead-ova.</p>';
+            } else {
+                allLeads.reverse().forEach((lead, index) => {
+                    adminHTML += `
+                        <div class="border p-4 rounded-lg bg-gray-50">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-bold text-lg">${lead.email}</h3>
+                                    <p class="text-sm text-gray-600">${lead.timestamp}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">${lead.resultTitle}</span>
+                                    <p class="text-sm mt-1">${lead.score}/${lead.maxScore} poena</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button onclick="showLeadDetails(${allLeads.length - 1 - index})" class="bg-blue-500 text-white px-3 py-1 rounded text-sm mr-2">
+                                    👁️ Detalji
+                                </button>
+                                <button onclick="copyLeadData(${allLeads.length - 1 - index})" class="bg-green-500 text-white px-3 py-1 rounded text-sm">
+                                    📋 Kopiraj analizu
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            adminHTML += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', adminHTML);
+        }
+
+        function closeAdminPanel() {
+            const panel = document.querySelector('.fixed.inset-0.bg-black');
+            if (panel) panel.remove();
+        }
+
+        function showLeadDetails(index) {
+            const allLeads = JSON.parse(localStorage.getItem('aiTestLeads') || '[]');
+            const lead = allLeads[index];
+            
+            let detailsHTML = `
+                <div class="fixed inset-0 bg-black bg-opacity-50 z-60 flex items-center justify-center p-4">
+                    <div class="bg-white rounded-lg max-w-4xl w-full max-h-90vh overflow-y-auto p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold">Detalji Lead-a: ${lead.email}</h2>
+                            <button onclick="closeLeadDetails()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                        </div>
+                        
+                        <div class="mb-4 p-4 bg-gray-100 rounded">
+                            <p><strong>Email:</strong> ${lead.email}</p>
+                            <p><strong>Datum:</strong> ${lead.timestamp}</p>
+                            <p><strong>Rezultat:</strong> ${lead.resultTitle} (${lead.score}/${lead.maxScore} poena)</p>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold mb-3">Odgovori na pitanja:</h3>
+                        <div class="space-y-3">
+            `;
+            
+            lead.answers.forEach((answer, i) => {
+                let priority = "";
+                if (answer.points === 0) priority = "🔴 KRITIČNO";
+                else if (answer.points === 1) priority = "🟡 PROBLEM";
+                else if (answer.points === 2) priority = "🟢 DOBRO";
+                else priority = "✅ ODLIČNO";
+                
+                detailsHTML += `
+                    <div class="border-l-4 ${answer.points <= 1 ? 'border-red-500' : answer.points === 2 ? 'border-yellow-500' : 'border-green-500'} pl-4 py-2">
+                        <p class="font-semibold">${i + 1}. ${questions[i].question}</p>
+                        <p class="text-gray-700 mt-1">Odgovor: "${answer.text}"</p>
+                        <p class="text-sm mt-1">${answer.points}/3 poena ${priority}</p>
+                    </div>
+                `;
+            });
+            
+            detailsHTML += `
+                        </div>
+                        
+                        <div class="mt-6 flex gap-2">
+                            <button onclick="copyLeadData(${index})" class="bg-green-500 text-white px-4 py-2 rounded">
+                                📋 Kopiraj kompletnu analizu
+                            </button>
+                            <button onclick="closeLeadDetails()" class="bg-gray-500 text-white px-4 py-2 rounded">
+                                Zatvori
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', detailsHTML);
+        }
+
+        function closeLeadDetails() {
+            const details = document.querySelector('.z-60');
+            if (details) details.remove();
+        }
+
+        function copyLeadData(index) {
+            const allLeads = JSON.parse(localStorage.getItem('aiTestLeads') || '[]');
+            const lead = allLeads[index];
+            
+            let analysisText = `🚨 NOVI LEAD ZA AI AUTOMATIZACIJU!
+
+📧 Email: ${lead.email}
+📅 Datum: ${lead.timestamp}
+🏆 AI SPREMNOST: ${lead.resultTitle} (${lead.score}/${lead.maxScore} poena)
+
+📋 DETALJNI ODGOVORI SA ANALIZOM:
+
+`;
+
+            lead.answers.forEach((answer, i) => {
+                let priority = "";
+                let analysis = "";
+                let recommendation = "";
+                
+                if (answer.points === 0) {
+                    priority = "🔴 KRITIČNO";
+                    analysis = "Najveći problem - hitno potrebna AI automatizacija";
+                    recommendation = "PRIORITET #1 za implementaciju";
+                } else if (answer.points === 1) {
+                    priority = "🟡 PROBLEM";
+                    analysis = "Značajan prostor za poboljšanje uz AI";
+                    recommendation = "Srednji prioritet za optimizaciju";
+                } else if (answer.points === 2) {
+                    priority = "🟢 DOBRO";
+                    analysis = "Solidno, ali AI može dodatno poboljšati";
+                    recommendation = "Fokus na napredne AI funkcionalnosti";
+                } else {
+                    priority = "✅ ODLIČNO";
+                    analysis = "AI lider - već koristi automatizaciju";
+                    recommendation = "Fokus na skaliranje i napredne strategije";
+                }
+                
+                analysisText += `${i + 1}. ${questions[i].question}
+
+ODGOVOR: "${answer.text}"
+POENI: ${answer.points}/3 ${priority}
+ANALIZA: ${analysis}
+PREPORUKA: ${recommendation}
+
+---
+
+`;
+            });
+
+            // Dodaj procenu i preporuke
+            analysisText += `💰 PROCENJENA UŠTEDA:
+• Vreme: ${lead.score < 15 ? '25-40h' : lead.score < 30 ? '15-25h' : '10-15h'} nedeljno
+• Troškovi: ${lead.score < 15 ? '2000-5000€' : lead.score < 30 ? '1000-3000€' : '500-2000€'} mesečno
+• ROI: ${lead.score < 15 ? '300-500%' : lead.score < 30 ? '200-400%' : '150-300%'} u prvoj godini
+
+📞 SALES PRISTUP:
+• Urgentnost: ${lead.score < 15 ? 'VISOKA - gubi novac svaki dan' : lead.score < 30 ? 'SREDNJA - propušta prilike' : 'NISKA - optimizacija postojećeg'}
+• Verovatnoća konverzije: ${lead.score < 15 ? 'VISOKA (70%+)' : lead.score < 30 ? 'SREDNJA (40-70%)' : 'NISKA (20-40%)'}
+
+---
+Link: ${lead.url}`;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(analysisText).then(() => {
+                    showCustomAlert('Analiza je kopirana u clipboard!');
+                });
+            } else {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = analysisText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCustomAlert('Analiza je kopirana u clipboard!');
+            }
+        }
+
+        function exportLeads() {
+            const allLeads = JSON.parse(localStorage.getItem('aiTestLeads') || '[]');
+            
+            if (allLeads.length === 0) {
+                showCustomAlert('Nema lead-ova za izvoz!');
+                return;
+            }
+            
+            let exportText = `AI TEST LEAD-OVI - IZVOZ ${new Date().toLocaleString('sr-RS')}
+
+UKUPNO LEAD-OVA: ${allLeads.length}
+
+=====================================
+
+`;
+
+            allLeads.forEach((lead, index) => {
+                exportText += `LEAD #${index + 1}
+Email: ${lead.email}
+Datum: ${lead.timestamp}
+Rezultat: ${lead.resultTitle} (${lead.score}/${lead.maxScore} poena)
+
+ODGOVORI:
+`;
+                lead.answers.forEach((answer, i) => {
+                    exportText += `${i + 1}. ${questions[i].question}
+   Odgovor: "${answer.text}" (${answer.points}/3 poena)
+`;
+                });
+                
+                exportText += `
+PROCENA:
+- Verovatnoća konverzije: ${lead.score < 15 ? 'VISOKA' : lead.score < 30 ? 'SREDNJA' : 'NISKA'}
+- Urgentnost: ${lead.score < 15 ? 'VISOKA' : lead.score < 30 ? 'SREDNJA' : 'NISKA'}
+
+=====================================
+
+`;
+            });
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(exportText).then(() => {
+                    showCustomAlert('Svi lead-ovi su kopirani u clipboard!');
+                });
+            }
+        }
+
+        function clearLeads() {
+            if (confirm('Da li ste sigurni da želite da obrišete sve lead-ove?')) {
+                localStorage.removeItem('aiTestLeads');
+                showCustomAlert('Svi lead-ovi su obrisani!');
+                closeAdminPanel();
+            }
+        }
+
+        function showCustomAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968cf55487e1f969',t:'MTc1NDEzMTIzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
